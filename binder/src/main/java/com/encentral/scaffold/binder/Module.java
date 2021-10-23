@@ -5,6 +5,7 @@
  */
 package com.encentral.scaffold.binder;
 
+import com.encentral.image.inverter.impl.ImageInverterModule;
 import com.google.inject.AbstractModule;
 import play.libs.akka.AkkaGuiceSupport;
 
@@ -22,5 +23,6 @@ public class Module extends AbstractModule implements AkkaGuiceSupport {
 
         bind(BigBang.class).asEagerSingleton();
 
+        install(new ImageInverterModule());
     }
 }

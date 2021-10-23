@@ -171,6 +171,8 @@
         <module>commons</module>
         <module>binder</module>
         <module>integration-tests</module>
+        <module>image-inverter-api</module>
+        <module>image-inverter-impl</module>
     </modules>
 </project>
 
