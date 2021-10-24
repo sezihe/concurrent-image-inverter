@@ -3,7 +3,6 @@ package com.encentral.image.inverter.impl;
 import akka.actor.typed.ActorSystem;
 import com.encentral.image.inverter.api.IImageInverter;
 import com.encentral.image.inverter.impl.actor.ImageInverterActor;
-import play.libs.F;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,19 +14,39 @@ import java.io.IOException;
  * CreatedAt: 23/10/2021
  */
 public class DefaultImageInverterImpl implements IImageInverter {
+
     @Override
     public void invertImage(File image) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(image);
         int height = bufferedImage.getHeight();
         int width = bufferedImage.getWidth();
 
-        System.out.println(width + ";" + height);
-
         ActorSystem<ImageInverterActor.ImageInvertRequest> mSystem
                 = ActorSystem.create(ImageInverterActor.create(), "main");
 
-        mSystem.tell(new ImageInverterActor.ImageInvertRequest(bufferedImage, 0, 0, width, height));
-        // mSystem.tell(new ImageInverterActor.ImageInvertRequest(bufferedImage, 0, 250, width, height));
+        int actorCount = (int) Math.ceil(((double) width) / 200);
+        int widthEndingPoint = 0;
+        for(int i = 0; i < actorCount; i++) {
+            int widthStartingPoint = i * 200;
+            widthEndingPoint += 200;
+            if(widthStartingPoint < width) {
+                if(widthEndingPoint <= width) {
+                    mSystem.tell(new ImageInverterActor.ImageInvertRequest(actorCount, bufferedImage, 0, widthStartingPoint, widthEndingPoint, height));
+                    // System.out.println("Sending request. SWidth: " + widthStartingPoint + "; EWidth: " + widthEndingPoint);
+                } else {
+                    mSystem.tell(new ImageInverterActor.ImageInvertRequest(actorCount, bufferedImage, 0, widthStartingPoint, width, height));
+                }
+            } else {
+                System.out.println("SWidth: " + widthStartingPoint);
+            }
+        }
+    }
 
+    @Override
+    public File getInvertedImage() {
+        String userHomeFolder = System.getProperty("user.home");
+        File BICIFolder = new File(userHomeFolder, "BICI");
+
+        return new File(BICIFolder, "newImage.png");
     }
 }

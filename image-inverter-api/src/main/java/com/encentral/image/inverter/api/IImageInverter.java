@@ -9,5 +9,5 @@ import java.io.IOException;
  */
 public interface IImageInverter {
     void invertImage(File image) throws IOException;
-
+    File getInvertedImage();
 }

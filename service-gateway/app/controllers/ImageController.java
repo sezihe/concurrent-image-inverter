@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.inject.Inject;
 import io.swagger.annotations.*;
-import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -21,9 +20,6 @@ import java.io.IOException;
 public class ImageController extends Controller {
     @Inject
     IImageInverter iimageInverter;
-
-    @Inject
-    FormFactory formFactory;
 
     @ApiOperation(
             value = "Inverts An Image",
@@ -51,6 +47,7 @@ public class ImageController extends Controller {
         Http.MultipartFormData<File> body = request().body().asMultipartFormData();
         Http.MultipartFormData.FilePart<File> picture = body.getFile("image");
         ObjectNode responseJson = JsonNodeFactory.instance.objectNode();
+
         if(picture != null) {
             File file = picture.getFile();
             try {
@@ -59,7 +56,6 @@ public class ImageController extends Controller {
                 responseJson.put("message", "Image Inverted Successfully");
                 return ok(responseJson);
             } catch (IOException e) {
-                System.out.println("ERRORRRR");
                 e.printStackTrace();
                 return internalServerError();
             }
@@ -72,7 +68,7 @@ public class ImageController extends Controller {
 
     @ApiOperation(
             value = "Gets an Inverted Image",
-            produces = "image/png"
+            produces = "image/png, application/json"
     )
     @ApiResponses(
             value = {
@@ -85,7 +81,15 @@ public class ImageController extends Controller {
             {}
     )
     public Result getInvertedImage() {
-        File file = new File("C:\\drexx\\newImage.png");
-        return ok(file);
+        ObjectNode responseJson = JsonNodeFactory.instance.objectNode();
+        File image = iimageInverter.getInvertedImage();
+
+        if(image != null && image.isFile())
+            return ok(image);
+        else {
+            responseJson.put("status", "error");
+            responseJson.put("message", "No Inverted Image Found");
+            return badRequest(responseJson);
+        }
     }
 }

@@ -1,15 +1,13 @@
 package com.encentral.image.inverter.impl.actor;
 
+import akka.actor.typed.ActorRef;
 import akka.actor.typed.Behavior;
 import akka.actor.typed.javadsl.AbstractBehavior;
 import akka.actor.typed.javadsl.ActorContext;
 import akka.actor.typed.javadsl.Behaviors;
 import akka.actor.typed.javadsl.Receive;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * @author EZIHE S. DANIEL
@@ -17,13 +15,15 @@ import java.io.IOException;
  */
 public class ImageInverterActor extends AbstractBehavior<ImageInverterActor.ImageInvertRequest> {
     public static final class ImageInvertRequest {
+        public final int actorCount;
         public final BufferedImage image;
         public final int heightStartingPoint;
         public final int widthStartingPoint;
         public final int width;
         public final int height;
 
-        public ImageInvertRequest(BufferedImage image, int heightStartingPoint, int widthStartingPoint, int width, int height) {
+        public ImageInvertRequest(int actorCount, BufferedImage image, int heightStartingPoint, int widthStartingPoint, int width, int height) {
+            this.actorCount = actorCount;
             this.image = image;
             this.heightStartingPoint = heightStartingPoint;
             this.widthStartingPoint = widthStartingPoint;
@@ -36,8 +36,10 @@ public class ImageInverterActor extends AbstractBehavior<ImageInverterActor.Imag
         return Behaviors.setup(ImageInverterActor::new);
     }
 
+    private final ActorRef<ImageInvertingCompletedActor.ImageInvertCompleteRequest> invertingComplete;
     private ImageInverterActor (ActorContext<ImageInvertRequest> context) {
         super();
+        invertingComplete = context.spawn(ImageInvertingCompletedActor.create(), "invertingComplete");
     }
 
     @Override
@@ -57,7 +59,6 @@ public class ImageInverterActor extends AbstractBehavior<ImageInverterActor.Imag
                 int r = (p>>16) & 0xff;
                 int g = (p>>8) & 0xff;
                 int b = p & 0xff;
-                // System.out.println(a + ";" + r + ";" + g + ";" + b + ";");
 
                 // check if it's red
                 if(g == 0 && b == 0) {
@@ -81,12 +82,8 @@ public class ImageInverterActor extends AbstractBehavior<ImageInverterActor.Imag
             }
         }
 
-        File newImage = new File("C:\\drexx\\newImage.png");
-        try {
-            ImageIO.write(image, "png", newImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        invertingComplete.tell(new ImageInvertingCompletedActor.ImageInvertCompleteRequest(imageInvertRequest.actorCount, image));
+
         return this;
     }
 }
