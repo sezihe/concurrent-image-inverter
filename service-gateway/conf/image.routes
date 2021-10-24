@@ -1,0 +1,2 @@
+POST           /                                      controllers.ImageController.invertImage
+GET            /invert                                controllers.ImageController.getInvertedImage

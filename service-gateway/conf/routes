@@ -18,5 +18,4 @@ GET            /error                                controllers.HomeController.
 GET            /error/                               controllers.HomeController.error()
 GET            /api-docs                             controllers.HomeController.api()
 
-POST           /image/invert                         controllers.ImageController.invertImage
-GET            /image                                controllers.ImageController.getInvertedImage
+->             /image/                                image.Routes
