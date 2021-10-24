@@ -1,33 +1,26 @@
-# ESL Play Framework Template Minimal v2
+# Basic Employee Management System
+### [Encentral Solutions](https://www.encentralsolutions.com/)
 
-Encentral Solutions Play Framework Minimal Project Template
+A Basic Image Inverter Application.
 
-## Necessary Files to be edited
+#### Inverting Rules:
+```
+Red -> Green
 
-### entities Module
+Green -> Blue
 
-#### - /src/main/resources/META-INF/persistence.xml
-```xml
-<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/{YOUR_DB_NAME}"/>
-<property name="javax.persistence.jdbc.user" value="{YOUR_DB_USERNAME}"/>
-<property name="javax.persistence.jdbc.password" value="{YOUR_DB_PASSWORD}"/>
+Blue -> Red
 ```
 
-### service-gateway Module
+## How to Use
+- Clone this repo to your local computer
+- Open up terminal and run ``mvn clean install``
+- ``cd`` into 'service-gateway' module and run ``mvn play2:run``
+- Proceed to your browser to test the endpoints. Swagger URL ``http://localhost:9000/docs?url=http://localhost:9000/api-docs.json#/``
 
-#### - /conf/META-INF/persistence.xml
-```xml
-<property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/{YOUR_DB_NAME}"/>
-<property name="javax.persistence.jdbc.user" value="{YOUR_DB_USERNAME}"/>
-<property name="javax.persistence.jdbc.password" value="{YOUR_DB_PASSWORD}"/>
-```
 
-#### - /conf/application.conf
-```
-db.default.url="jdbc:postgresql://localhost:5432/{YOUR_DB_NAME}"
 
-db.default.username={YOUR_DB_USERNAME}
-db.default.password="{YOUR_DB_PASSWORD}"
-```
-
-##### Finally, change README.md :)
+## Technologies Used
+- Play Framework
+- Akka Toolkit
+- Maven (Build Tool)
