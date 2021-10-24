@@ -45,12 +45,9 @@ public class ImageInvertingCompletedActor extends AbstractBehavior<ImageInvertin
     private Behavior<ImageInvertCompleteRequest> onImageInvertCompleteRequest(ImageInvertCompleteRequest imgInvertCompleteRequest) {
         if(requestCount == imgInvertCompleteRequest.actorCount) {
             // write to disk
-            String userHomeFolder = System.getProperty("user.home");
-            File BICIFolder = new File(userHomeFolder, "BICI");
-            if(!BICIFolder.isDirectory())
-                BICIFolder.mkdir();
-
-            File newImage = new File(BICIFolder, "newImage.png");
+            String serviceGatewayDir = System.getProperty("user.dir");
+            String projectDir = serviceGatewayDir.substring(0, serviceGatewayDir.length()-16);
+            File newImage = new File(projectDir, "/image-inverter-impl/src/main/resources/images/newImage.png");
             try {
                 ImageIO.write(imgInvertCompleteRequest.image, "png", newImage);
             } catch (IOException e) {

@@ -44,9 +44,10 @@ public class DefaultImageInverterImpl implements IImageInverter {
 
     @Override
     public File getInvertedImage() {
-        String userHomeFolder = System.getProperty("user.home");
-        File BICIFolder = new File(userHomeFolder, "BICI");
+        String serviceGatewayDir = System.getProperty("user.dir");
+        String projectDir = serviceGatewayDir.substring(0, serviceGatewayDir.length()-16);
+        File imagesDir = new File(projectDir, "/image-inverter-impl/src/main/resources/images");
 
-        return new File(BICIFolder, "newImage.png");
+        return new File(imagesDir, "newImage.png");
     }
 }
