@@ -1,4 +1,4 @@
-# Basic Employee Management System
+# Basic Image Inverter
 ### [Encentral Solutions](https://www.encentralsolutions.com/)
 
 A Basic Image Inverter Application.
