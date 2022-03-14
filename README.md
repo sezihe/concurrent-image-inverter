@@ -1,5 +1,4 @@
 # Basic Image Inverter
-### [Encentral Solutions](https://www.encentralsolutions.com/)
 
 A Basic Image Color Inverter Application. Inverts the Color in a Large, Medium or small size Image at blazing fast speeds by utilizing Akka's Concurrency Implementation. 
 
